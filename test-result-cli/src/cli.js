@@ -1,7 +1,8 @@
 "use strict";
 import arg from 'arg';
 import inquirer from 'inquirer';
-
+import { convertResultFiles } from './main';
+//const Argument = require('./../src/models/Argument');
 function parseArgumentsIntoOptions(rawArgs) {
     const args = arg(
       {
@@ -31,15 +32,15 @@ function parseArgumentsIntoOptions(rawArgs) {
     }
    
     const questions = [];
-    if (!options.framework) {
-      questions.push({
-        type: 'list',
-        name: 'framework',
-        message: 'Please choose which project framework to use',
-        choices: ['Nunit', 'Junit'],
-        default: defaultFramework,
-      });
-    }
+    // if (!options.framework) {
+    //   questions.push({
+    //     type: 'list',
+    //     name: 'framework',
+    //     message: 'Please choose which project framework to use',
+    //     choices: ['Nunit', 'Junit'],
+    //     default: defaultFramework,
+    //   });
+    // }
    
     if (!options.path) {
       questions.push({
@@ -59,6 +60,6 @@ function parseArgumentsIntoOptions(rawArgs) {
    }
 export async  function cli(args) {
     let options = parseArgumentsIntoOptions(args);
-    options = await promptForMissingOptions(options);
-    console.log(options);
+    //options = await promptForMissingOptions(options);
+    await convertResultFiles(options.path);
    }
