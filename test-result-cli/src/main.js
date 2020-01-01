@@ -13,7 +13,8 @@ export async function convertResultFiles(xmlFilesDir) {
         for await (const dirent of dir) {
             if (dirent.isFile()&&isValidFile(dirent.name)){
                console.log('Test result file: %s',dirent.name);
-              await readFile(path.join(xmlFilesDir,dirent.name));
+             let res= await readFile(path.join(xmlFilesDir,dirent.name));
+             xmlFileResponse(res);
             }
         }
       } catch (err) {
@@ -28,13 +29,18 @@ export async function convertResultFiles(xmlFilesDir) {
        try{
         console.log('Test result file path: %s',filePath);
          let res=await fs.promises.readFile(filePath,{encoding: 'utf-8'});
-		 var parseString = require('xml2js').parseString;
-parseString(res, function (err, result) {
-    console.dir(JSON.stringify(result));
-});
+         return res;
        }
        catch (err) {
         console.error(err);
   
       }
+      return '';
    }
+ function xmlFileResponse(res){
+  let parseString = require('xml2js').parseString; 
+  parseString(res,{trim: true,attrkey :'attr',charkey:'text',normalizeTags :true},function(err,result){
+    //console.log(result['test-run']);
+    console.log(result['test-case']);
+  });
+ }
